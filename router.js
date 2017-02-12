@@ -29,26 +29,12 @@ router.post('/censure', function(req, res) {
     censure(req.body.msg)
     .then((censured) => {
         res.status(200).send(censured).end();
-        request({
-        uri: "http://localhost:8000/get",
-        method: "GET"
-        }, function(error, response, body) {
-            console.log(body);
-        });
-        // http.get('http://localhost:8000/get', function(res) {
-        //     console.log("got res");
-        //     let rawData     = '',
-        //         parsedData  = {};
-        //     res.on('data', (chunk) => rawData += chunk);
-        //     res.on('end', () => {
-        //         try {
-        //             parsedData = JSON.parse(rawData);
-        //             console.log(parsedData);
-        //         } catch (e) {
-        //             console.log(e.message);
-        //         }
-        //     });
-        // })
+        // request({
+        // uri: "http://localhost:8000/get",
+        // method: "GET"
+        // }, function(error, response, body) {
+        //     console.log(body);
+        // });
     })
     .catch((err) => {
         res.status(400).send(err).end();
