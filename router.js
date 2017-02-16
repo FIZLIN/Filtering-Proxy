@@ -3,6 +3,7 @@ const express      = require('express'),
       router       = express.Router(),
 
       FiltersModel = require('./models/filters');
+    //   UsersModel   = require('./models/users');
 
 function censure(msg) {
     return new Promise(function(resolve, reject) {
@@ -23,18 +24,28 @@ function censure(msg) {
     })
 }
 
+router.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+
 router.post('/censure', function(req, res) {
     if (!req.body.msg) return res.status(400).send("Missing body!").end();
 
     censure(req.body.msg)
     .then((censured) => {
         res.status(200).send(censured).end();
-        // request({
-        // uri: "http://localhost:8000/get",
-        // method: "GET"
-        // }, function(error, response, body) {
-        //     console.log(body);
-        // });
+        request({
+            uri: "http://localhost:8000/post",
+            method: "POST",
+            form: {
+                data: censured
+            }
+        }, function(error, response, body) {
+            console.log(body);
+        });
     })
     .catch((err) => {
         res.status(400).send(err).end();
