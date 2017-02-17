@@ -20,6 +20,7 @@ view.post('/login', function(req, res) {
      UsersModel.findOne({ 'email': req.body.email }, function(err, user) {
         if (user) {
             if (auth.logUser(req, res, user)) {
+                console.log(req.session);
                 res.redirect("/filters");
             } else {
                 res.send("Invalid password!");
@@ -37,17 +38,16 @@ view.get('/register', function(req, res) {
 });
 
 view.post('/register', function(req, res) {
-    // Get our form values. These rely on the "name" attributes
-    var password = req.body.password;
-    var confirmPassword = req.body.confirmPassword;
+    let email = req.body.email,
+        password = req.body.password,
+        confirmPassword = req.body.confirmPassword;
+
     if (password != confirmPassword) {
         res.send("Password and confirm password are not equal!");
         return;
     }
 
-    var email = req.body.email,
-        password = req.body.password,
-        hashedPasword = auth.hashPassword(password);
+    let hashedPasword = auth.hashPassword(password);
 
     new UsersModel({email: email, password: hashedPasword})
     .save(function(err, doc) {
@@ -60,15 +60,21 @@ view.post('/register', function(req, res) {
 });
 
 view.get('/filters', function(req, res) {
+    console.log('');
+    console.log(req.session);
     FiltersModel.find({},'', (err,data) => {
         if (err) console.log("error occured: ", e)
         else {
-            console.log(data);
             res.render('pages/filters',{
                 "objectslist": data
             });
         } 
     });
+});
+
+view.get('/logout', auth.requireAuthentication, function(req, res) {
+    req.session = null;
+    res.redirect("/login");
 });
 
 view.post('/add', function(req, res) {
