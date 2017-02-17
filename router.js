@@ -3,7 +3,7 @@ const express      = require('express'),
       router       = express.Router();
 
 require('./models/connection');
-const FiltersModel = require('./models/filters');
+const FiltersModel = require('./models/collections/filters');
 
 function censure(msg) {
     return new Promise(function(resolve, reject) {

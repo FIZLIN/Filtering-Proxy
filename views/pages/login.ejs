@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/head %>
+</head>
+<body class="container">
+	<main>
+		<div class="jumbotron login-div">
+			<h2>SIGN IN</h2>
+			<form action='/login' method='post' id='loginForm'>
+				<div class='input-panel'>
+					<label for='username'>Username</label>
+					<input id='username' name='username' type='text' />
+				</div>
+				
+				<div class='input-panel'>
+					<label for='password'>Password</label>
+					<input id='password' name='password' type='password' />
+				</div>
+				
+				<div class='input-panel'>
+					<button type='submit' id='login-btn'>Login</button>
+				</div>
+			</form>
+
+			<!--<div class='input-panel register-panel'>
+				Don't have an account? <a href='/register'>Register</a>
+			</div>-->
+		</div>
+	</main>
+</body>
+</html>
