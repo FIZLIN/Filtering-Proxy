@@ -1,6 +1,8 @@
 # Filtering-Proxy
 * Description
-A proxy which filters request based on given parametres.
+
+    A proxy which filters request based on given parametres.
+    These parametres can be added/removed from an admin side.
 
 * Used Technologies
     * Node.js, Express.js and JavaScript for the server side
@@ -8,5 +10,6 @@ A proxy which filters request based on given parametres.
     * EJS for the views
     * MongoDB and Mongoose for the database
 * Motivation
-This project was made as course work for the JS Advanced course in Sofia University
+
+    This project was made as a course work for the JS Advanced course in Sofia University
 
