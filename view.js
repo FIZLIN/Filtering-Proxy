@@ -4,7 +4,7 @@ const express      = require('express'),
       UsersModel     = require('./models/collections/users'),
 
       router       = express.Router(),
-      auth         = require('/auth')
+      auth         = require('./auth')
 
 router.get('/login', function(req, res) {
     if (false) {
