@@ -3,7 +3,7 @@ const  express = require("express"),
 
 	   router     = require('./router'),
 	   view	     = require('./view'),
-	   
+
 	   app = express(),
 	   port = 8888;
 

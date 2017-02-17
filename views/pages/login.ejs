@@ -4,29 +4,25 @@
 	<% include ../partials/head %>
 </head>
 <body class="container">
-	<main>
-		<div class="jumbotron login-div">
-			<h2>SIGN IN</h2>
-			<form action='/login' method='post' id='loginForm'>
-				<div class='input-panel'>
-					<label for='username'>Username</label>
-					<input id='username' name='username' type='text' />
-				</div>
-				
-				<div class='input-panel'>
-					<label for='password'>Password</label>
-					<input id='password' name='password' type='password' />
-				</div>
-				
-				<div class='input-panel'>
-					<button type='submit' id='login-btn'>Login</button>
-				</div>
-			</form>
-
-			<!--<div class='input-panel register-panel'>
-				Don't have an account? <a href='/register'>Register</a>
-			</div>-->
+	<h2>SIGN IN</h2>
+	<form action='/login' method='post' id='loginForm'>
+		<div class='inputContainer'>
+			<label for='email'>Email</label>
+			<input id='email' name='email' type='text' />
 		</div>
-	</main>
+		
+		<div class='inputContainer'>
+			<label for='password'>Password</label>
+			<input id='password' name='password' type='password' />
+		</div>
+		
+		<div class='inputContainer'>
+			<button type='submit' id='login-btn'>Login</button>
+		</div>
+	</form>
+
+	<div>
+		Don't have an account? <a href='/register'>Register</a>
+	</div>
 </body>
 </html>
