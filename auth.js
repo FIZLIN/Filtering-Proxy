@@ -1,8 +1,7 @@
-var jwt = require("jsonwebtoken");
-var tokenSecret = 'secret';
-
-var bcrypt = require('bcrypt');
-const saltRounds = 10;
+const jwt = require("jsonwebtoken"),
+      tokenSecret = 'secret',
+      bcrypt = require('bcrypt'),
+      saltRounds = 10;
 
 
 function getLoggedUserId(token) {
