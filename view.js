@@ -1,12 +1,14 @@
 const express      = require('express'),
       request      = require('request'),
 
-      UsersModel     = require('./models/collections/users'),
+      UsersModel   = require('./models/collections/users'),
+      FiltersModel = require('./models/collections/filters'),
 
-      router       = express.Router(),
-      auth         = require('./auth')
+      view         = express.Router(),
+      router       = require('./router'),
+      auth         = require('./auth');
 
-router.get('/login', function(req, res) {
+view.get('/login', function(req, res) {
     if (false) {
         res.redirect("/products");
     } else {
@@ -14,7 +16,7 @@ router.get('/login', function(req, res) {
     }
 });
 
-router.post('/login', function(req, res) {
+view.post('/login', function(req, res) {
      User.findOne({ 'email': req.body.email }, function(err, user) {
         if (user) {
             if (authenticationHelper.logUser(req, res, user)) {
@@ -30,11 +32,11 @@ router.post('/login', function(req, res) {
     });
 });
 
-router.get('/register', function(req, res) {
+view.get('/register', function(req, res) {
     res.render('pages/register');
 });
 
-router.post('/register', function(req, res) {
+view.post('/register', function(req, res) {
     // Get our form values. These rely on the "name" attributes
     var password = req.body.password;
     var confirmPassword = req.body.confirmPassword;
@@ -43,12 +45,12 @@ router.post('/register', function(req, res) {
         return;
     }
 
-    var hashedPasword = auth.hashPassword(password);
-    // Submit to the DB
-    new UsersModel({
-        "email": req.body.email,
-        "password": hashedPasword,
-    }).save(function(err, doc) {
+    var email = req.body.email,
+        password = req.body.password,
+        hashedPasword = auth.hashPassword(password);
+
+    new UsersModel({email: email, password: hashedPasword})
+    .save(function(err, doc) {
         if (err) {
             res.send("There was a problem registering the user.");
         } else {
@@ -57,4 +59,18 @@ router.post('/register', function(req, res) {
     });
 });
 
-module.exports = router;
+view.get('/filters', auth.requireAuthentication, function(req, res) {
+    auth.requireAuthentication();
+    FiltersModel.find({},'', (err,data) => {
+        if (err) console.log("error occured: ", e)
+        else {
+            console.log(data);
+            res.render('pages/filters',{
+                "objectslist": data
+            });
+        } 
+    });
+});
+
+
+module.exports = view;

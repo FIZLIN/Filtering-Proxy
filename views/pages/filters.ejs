@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/head %>
+</head>
+<body class="container">
+    <h2>FILTERS</h2>
+    <table class='grid-table'>
+            <tr>
+                <th>
+                    Value
+                </th>
+                <th>
+                    Action
+                </th>
+                <th>
+                </th>
+            </tr>
+            <% if (objectslist && objectslist.length > 0) { %>
+                <% for(var i=0; i < objectslist.length; i++) { %>
+                    <tr class='filterRow' object-id='<%= objectslist[i]._id %>'>
+                        <td data-property='name'>
+                            <%= objectslist[i].value %>
+                        </td>
+                        <td data-property='name'>
+                            <%= objectslist[i].action %>
+                        </td>
+                        <td>
+                            <a onclick="deleteFilter('<%= objectslist[i]._id %>')">Remove</a>
+                        </td>
+                    </tr>
+                <% } %>
+            <% } else { %>
+                <tr>
+                    <td> 
+                        No data
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+</body>
+</html>
