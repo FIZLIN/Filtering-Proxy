@@ -1,9 +1,9 @@
 const express      = require('express'),
       request      = require('request'),
-      router       = express.Router(),
+      router       = express.Router();
 
-      FiltersModel = require('./models/filters');
-    //   UsersModel   = require('./models/users');
+require('./models/connection');
+const FiltersModel = require('./models/filters');
 
 function censure(msg) {
     return new Promise(function(resolve, reject) {
