@@ -44,6 +44,7 @@ view.get('/filters', auth.requireAuthentication, function(req, res) {
 
 view.get('/logout', auth.requireAuthentication, function(req, res) {
     res.clearCookie('token');
+    res.clearCookie('userEmail');
     res.redirect("/login");
 });
 
@@ -74,21 +75,39 @@ view.post('/register', function(req, res) {
         res.send("Password and confirm password are not equal!");
         return;
     }
-
-    let hashedPasword = auth.hashPassword(password);
-
-    new UsersModel({email: email, password: hashedPasword})
-    .save(function(err, doc) {
-        if (err) {
-            res.send("There was a problem registering the user.");
-        } else {
-            res.redirect("/login");
-        }
-    });
+    UsersModel.saveStuff(email, password)
+    .then((x) => {
+        res.redirect("/login");
+    })
+    .catch((x) => {
+        res.send(x);
+    })
 });
 
+view.post('/updatePass', function(req, res) {
+    let email = req.cookies.userEmail,
+        password = req.body.password,
+        confirmPassword = req.body.confirmPassword;
+
+    if (!email) {
+        res.send("no email");
+    }
+
+    if (password != confirmPassword) {
+        res.send("Password and confirm password are not equal!");
+        return;
+    }
+    UsersModel.saveStuff(email, password, true)
+    .then((x) => {
+        res.redirect("/filters");
+    })
+    .catch((x) => {
+        res.send(x);
+    })
+})
+
 view.post('/add', function(req, res) {
-    let value  = req.body.value,
+    let value  = req.body.value,    
         action = req.body.action,
         
         newFilter = new FiltersModel({ value, action });

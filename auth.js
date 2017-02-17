@@ -34,7 +34,8 @@ function hashPassword(plainPassword) {
 
 function login(req, res, user) {
     if (bcrypt.compareSync(req.body.password, user.password)) {
-        res.cookie('token', getToken(user))
+        res.cookie('token', getToken(user));
+        res.cookie('userEmail', user.email);
         return true;
     }
     return false;
