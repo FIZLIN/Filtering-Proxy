@@ -17,10 +17,10 @@ view.get('/login', function(req, res) {
 });
 
 view.post('/login', function(req, res) {
-     User.findOne({ 'email': req.body.email }, function(err, user) {
+     UsersModel.findOne({ 'email': req.body.email }, function(err, user) {
         if (user) {
-            if (authenticationHelper.logUser(req, res, user)) {
-                res.redirect("/products");
+            if (auth.logUser(req, res, user)) {
+                res.redirect("/filters");
             } else {
                 res.send("Invalid password!");
                 return;
@@ -59,8 +59,7 @@ view.post('/register', function(req, res) {
     });
 });
 
-view.get('/filters', auth.requireAuthentication, function(req, res) {
-    auth.requireAuthentication();
+view.get('/filters', function(req, res) {
     FiltersModel.find({},'', (err,data) => {
         if (err) console.log("error occured: ", e)
         else {
@@ -72,5 +71,42 @@ view.get('/filters', auth.requireAuthentication, function(req, res) {
     });
 });
 
+view.post('/add', function(req, res) {
+    let value  = req.body.value,
+        action = req.body.action,
+        
+        newFilter = new FiltersModel({ value, action });
+    
+    if (!value || !action) {
+        console.log("Missing Data!")
+        return;
+    }
+    
+    newFilter.save(function (err) {
+        if (err) console.log("error occured: ", err)
+        else {
+            res.redirect("/filters");
+        }
+    });
+})
+
+view.post('/remove', function(req, res) {
+    let value  = req.body.value,
+        action = req.body.action;
+
+    console.log(value, action);
+
+    if (!value || !action) {
+        console.log("Missing Data!")
+        return;
+    }
+    
+    FiltersModel.findOneAndRemove({ value, action },'',(err,data) => {
+        if (err) console.log("error occured: ", err)
+        else {
+            res.redirect("/filters");
+        }
+    });
+})
 
 module.exports = view;

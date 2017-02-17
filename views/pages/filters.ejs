@@ -6,37 +6,60 @@
 <body class="container">
     <h2>FILTERS</h2>
     <table class='grid-table'>
-            <tr>
-                <th>
-                    Value
-                </th>
-                <th>
-                    Action
-                </th>
-                <th>
-                </th>
-            </tr>
-            <% if (objectslist && objectslist.length > 0) { %>
-                <% for(var i=0; i < objectslist.length; i++) { %>
-                    <tr class='filterRow' object-id='<%= objectslist[i]._id %>'>
-                        <td data-property='name'>
-                            <%= objectslist[i].value %>
-                        </td>
-                        <td data-property='name'>
-                            <%= objectslist[i].action %>
-                        </td>
-                        <td>
-                            <a onclick="deleteFilter('<%= objectslist[i]._id %>')">Remove</a>
-                        </td>
-                    </tr>
-                <% } %>
-            <% } else { %>
-                <tr>
-                    <td> 
-                        No data
+        <tr>
+            <th>
+                Value
+            </th>
+            <th>
+                Action
+            </th>
+            <th>
+            </th>
+        </tr>
+        <% if (objectslist && objectslist.length > 0) { %>
+            <% for(var i=0; i < objectslist.length; i++) { %>
+                <tr class='filterRow' object-id='<%= objectslist[i]._id %>'>
+                    <td data-property='value'>
+                        <%= objectslist[i].value %>
+                    </td>
+                    <td data-property='action'>
+                        <%= objectslist[i].action %>
+                    </td>
+                    <td>
+                        <form method="post" action="/remove">
+                            <input value="<%= objectslist[i].value %>" name="value" type="text" style="display: none">
+                            <input value="<%= objectslist[i].action %>" name="action" type="text" style="display: none">
+                            <button>Remove</button>
+                        </form>
                     </td>
                 </tr>
             <% } %>
-        </table>
+        <% } else { %>
+            <tr>
+                <td> 
+                    No data
+                </td>
+            </tr>
+        <% } %>
+    </table>
+    <h2>ADD FILTER</h2>
+    <form method='post' action='/add'>
+        <div class='inputContainer'>
+            <label for='value'>Value</label>
+            <input id='value' name='value' type='text' />
+        </div>
+        
+        <div class='inputContainer'>
+            <label for='action'>Action</label>
+            <select id='action' name='action'>
+                <option value='censure'>Censure</option>
+                <option value='reject'>Reject</option>
+            </select>
+        </div>
+        
+        <div class='inputContainer'>
+            <button type='submit'>Add</button>
+        </div>
+    </form>
 </body>
 </html>

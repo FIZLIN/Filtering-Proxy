@@ -52,8 +52,9 @@ function hashPassword(plainPassword) {
 function logUser(req, res, user) {
     if (comparePasswords(req.body.password, user.password)) {
         var token = getTokenForUser(user);
+        if (!req.session) req.session = {};
         req.session.accessToken = token;
-        req.session.currentUsername = user.username
+        req.session.currentEmail = user.email;
         return true;
     }
 
