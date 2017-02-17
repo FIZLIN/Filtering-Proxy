@@ -8,19 +8,51 @@ const express      = require('express'),
       router       = require('./router'),
       auth         = require('./auth');
 
+
+// GET
+
+view.get('/', function(req, res) {
+    if (auth.checkLogin(req)) {
+        res.redirect("/filters");
+    } else {
+        res.redirect("/login");
+    }
+})
+
 view.get('/login', function(req, res) {
-    if (false) {
-        res.redirect("/products");
+    if (auth.checkLogin(req)) {
+        res.redirect("/filters");
     } else {
         res.render('pages/login');
     }
 });
 
+view.get('/register', function(req, res) {
+    res.render('pages/register');
+});
+
+view.get('/filters', auth.requireAuthentication, function(req, res) {
+    FiltersModel.find({},'', (err,data) => {
+        if (err) res.send("error occured: ", e)
+        else {
+            res.render('pages/filters',{
+                "objectslist": data
+            });
+        } 
+    });
+});
+
+view.get('/logout', auth.requireAuthentication, function(req, res) {
+    res.clearCookie('token');
+    res.redirect("/login");
+});
+
+// POST
+
 view.post('/login', function(req, res) {
      UsersModel.findOne({ 'email': req.body.email }, function(err, user) {
         if (user) {
-            if (auth.logUser(req, res, user)) {
-                console.log(req.session);
+            if (auth.login(req, res, user)) {
                 res.redirect("/filters");
             } else {
                 res.send("Invalid password!");
@@ -31,10 +63,6 @@ view.post('/login', function(req, res) {
             return;
         }
     });
-});
-
-view.get('/register', function(req, res) {
-    res.render('pages/register');
 });
 
 view.post('/register', function(req, res) {
@@ -59,24 +87,6 @@ view.post('/register', function(req, res) {
     });
 });
 
-view.get('/filters', auth.requireAuthentication, function(req, res) {
-    console.log('');
-    console.log(req.session);
-    FiltersModel.find({},'', (err,data) => {
-        if (err) console.log("error occured: ", e)
-        else {
-            res.render('pages/filters',{
-                "objectslist": data
-            });
-        } 
-    });
-});
-
-view.get('/logout', auth.requireAuthentication, function(req, res) {
-    req.session = null;
-    res.redirect("/login");
-});
-
 view.post('/add', function(req, res) {
     let value  = req.body.value,
         action = req.body.action,
@@ -84,12 +94,12 @@ view.post('/add', function(req, res) {
         newFilter = new FiltersModel({ value, action });
     
     if (!value || !action) {
-        console.log("Missing Data!")
+        res.send("Missing Required Data!")
         return;
     }
     
     newFilter.save(function (err) {
-        if (err) console.log("error occured: ", err)
+        if (err) res.send("error occured: ", err)
         else {
             res.redirect("/filters");
         }
@@ -99,16 +109,9 @@ view.post('/add', function(req, res) {
 view.post('/remove', function(req, res) {
     let value  = req.body.value,
         action = req.body.action;
-
-    console.log(value, action);
-
-    if (!value || !action) {
-        console.log("Missing Data!")
-        return;
-    }
     
     FiltersModel.findOneAndRemove({ value, action },'',(err,data) => {
-        if (err) console.log("error occured: ", err)
+        if (err) res.send("error occured: ", err)
         else {
             res.redirect("/filters");
         }
