@@ -77,7 +77,8 @@ function logUser(req, res, user) {
         req.session = {};
         req.session.accessToken = token;
         req.session.currentEmail = user.email;
-        console.log(req.session);
+        console.log(req.session)
+        res.cookie('token', token)
         return true;
     }
 

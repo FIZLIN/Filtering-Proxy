@@ -59,7 +59,7 @@ view.post('/register', function(req, res) {
     });
 });
 
-view.get('/filters', function(req, res) {
+view.get('/filters', auth.requireAuthentication, function(req, res) {
     console.log('');
     console.log(req.session);
     FiltersModel.find({},'', (err,data) => {
